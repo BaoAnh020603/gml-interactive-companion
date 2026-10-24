@@ -22,7 +22,7 @@
   <section class="panel simulator" aria-label="Minh họa chuyển động">
     <div class="sim-head"><h2>Minh họa khi thực hành</h2><span class="sim-status" id="simStatus" aria-live="polite">Đang đứng trên mặt đất</span></div>
     <div class="stage"><div class="sim-player" id="simPlayer"></div><div class="ground"></div></div>
-    <div class="sim-values"><span>gravity: 0.8</span><span id="simSpeed">vspeed: 0</span><span id="simFrame">step: 0</span></div>
+    <div class="sim-values"><span id="simGravity">gravity: 0.8</span><span id="simSpeed">vspeed: 0</span><span id="simFrame">step: 0</span></div>
     <div class="sim-actions"><button class="btn primary" id="jumpBtn" type="button">↑ Nhảy (vk_up)</button><button class="btn" id="resetSimBtn" type="button">↺ Chạy lại</button></div>
   </section>
   <section class="panel lesson-plan"><h2>Lộ trình 120 phút hôm nay</h2><div class="flashcards"><div class="flash"><b>20′ · Ôn GML</b>So sánh DnD với <code>direction</code>, <code>speed</code>, <code>room_goto</code>.</div><div class="flash"><b>30′ · Va chạm</b>Mario giậm đầu địch: <code>y &lt; other.y</code>; va ngang thì thua.</div><div class="flash"><b>25′ · Hiệu ứng chết</b><code>obj_player_die</code> và <code>obj_enemy_die</code> nảy rồi rơi.</div><div class="flash"><b>25′ · Xu &amp; điểm</b><code>diem += 1</code>, hủy xu sau khi ăn.</div><div class="flash"><b>20′ · Draw GUI</b>Vẽ HUD bằng <code>draw_text</code> và tổng kết 4 câu hỏi.</div></div></section>

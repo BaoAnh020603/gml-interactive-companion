@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GameMaker Learning Companion — Buổi 2</title>
+  <title>GameMaker Learning Companion — Lesson 3</title>
   <style>
     :root { --ink:#172235; --muted:#64748b; --paper:#f7f8fc; --surface:#fff; --line:#e2e8f0; --blue:#2563eb; --blue-soft:#eff6ff; --green:#15803d; --green-soft:#f0fdf4; --red:#b91c1c; --red-soft:#fef2f2; --amber:#b45309; --amber-soft:#fffbeb; }
     * { box-sizing:border-box; } body { margin:0; color:var(--ink); background:var(--paper); font:16px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
@@ -26,7 +26,7 @@
 <body>
 <main class="app">
   <header class="hero">
-    <div><p class="eyebrow">GameMaker Studio · Buổi 2</p><h1>Chuyển động, trọng lực &amp; nhảy</h1><p class="sub">Làm từng nhiệm vụ trong GameMaker, sau đó kéo thả file <code>.gml</code> hoặc cả thư mục dự án vào đây để tự kiểm tra.</p></div>
+    <div><p class="eyebrow">GameMaker Studio · Lesson 3</p><h1>Làm quen với GML &amp; xử lý va chạm</h1><p class="sub">Học theo vòng lặp: hiểu bản chất → viết GML → phá game → tự giải thích vì sao game phản ứng như vậy.</p></div>
     <section class="progress-card" aria-label="Tiến độ"><div class="progress-label"><span>Tiến độ buổi học</span><span id="progressText">0 / 3</span></div><div class="track"><div class="bar" id="progressBar"></div></div></section>
   </header>
   <section class="panel studio" aria-label="GameMaker mini workspace">
@@ -42,6 +42,7 @@
     <div class="sim-values"><span>gravity: 0.8</span><span id="simSpeed">vspeed: 0</span><span id="simFrame">step: 0</span></div>
     <div class="sim-actions"><button class="btn primary" id="jumpBtn" type="button">↑ Nhảy (vk_up)</button><button class="btn" id="resetSimBtn" type="button">↺ Chạy lại</button></div>
   </section>
+  <section class="panel lesson-plan"><h2>Lộ trình 120 phút hôm nay</h2><div class="flashcards"><div class="flash"><b>20′ · Ôn GML</b>So sánh DnD với <code>direction</code>, <code>speed</code>, <code>room_goto</code>.</div><div class="flash"><b>30′ · Va chạm</b>Mario giậm đầu địch: <code>y &lt; other.y</code>; va ngang thì thua.</div><div class="flash"><b>25′ · Hiệu ứng chết</b><code>obj_player_die</code> và <code>obj_enemy_die</code> nảy rồi rơi.</div><div class="flash"><b>25′ · Xu &amp; điểm</b><code>diem += 1</code>, hủy xu sau khi ăn.</div><div class="flash"><b>20′ · Draw GUI</b>Vẽ HUD bằng <code>draw_text</code> và tổng kết 4 câu hỏi.</div></div></section>
   <div class="grid">
     <aside class="panel"><h2>Nhiệm vụ</h2><div class="task-list" id="taskList"></div><div class="tip"><b>Mẹo làm bài:</b> Không cần đặt tên biến giống hệt ví dụ. Hệ thống ưu tiên kiểm tra hành vi code; nếu em có cách khác, hãy gửi bài cho thầy xem.</div></aside>
     <section class="content">
@@ -54,9 +55,10 @@
 </main>
 <script>
   const tasks = [
-    { title:'Tạo trọng lực, va chạm và nhảy', tag:'Cơ bản', desc:'Làm cho <code>obj_mario</code> rơi xuống nền, dừng lại khi chạm nền và nhảy khi nhấn phím Lên.', rules:[['gravity', /\bgravity\s*=\s*(?!0(?:\D|$))[-+]?\d+(?:\.\d+)?/i, 'Có gán trọng lực lớn hơn 0'], ['stop', /(?:vspeed\s*=\s*0|gravity\s*=\s*0)/i, 'Có xử lý dừng khi va chạm'], ['jump', /\bvspeed\s*=\s*-\s*\d+/i, 'Có đặt vận tốc nhảy theo chiều lên'], ['ground', /(?:if\s*\([^)]*(?:gravity\s*==?\s*0|vspeed\s*==?\s*0|place_meeting|on_ground)|keyboard_check(?:_pressed)?\s*\([^)]*(?:vk_up|ord\s*\(\s*["\']W))/i, 'Có điều kiện/đầu vào cho thao tác nhảy']], },
-    { title:'Tinh chỉnh cảm giác nhảy', tag:'Thử thách', desc:'Điều chỉnh lực nhảy và trọng lực để Mario không nhảy quá thấp hoặc quá cao.', rules:[['jump', /\bvspeed\s*=\s*-\s*\d+/i, 'Có đặt lực nhảy'], ['gravity', /\bgravity\s*=\s*[-+]?\d+(?:\.\d+)?/i, 'Có tinh chỉnh trọng lực']], },
-    { title:'Chống nhảy liên tục trên không', tag:'Nâng cao', desc:'Dùng kiểm tra chạm nền hoặc biến trạng thái để Mario chỉ nhảy khi đang đứng trên đất.', rules:[['ground', /(?:place_meeting|on_ground|is_grounded|vspeed\s*==?\s*0|gravity\s*==?\s*0)/i, 'Có kiểm tra nhân vật đang ở mặt đất'], ['jump', /\bvspeed\s*=\s*-\s*\d+/i, 'Có lệnh nhảy']], }
+    { title:'Va chạm Mario và kẻ địch', tag:'30 phút', desc:'Phân biệt giậm lên đầu địch và va chạm ngang bằng tọa độ Y.', rules:[['above', /y\s*<\s*other\.y/i, 'Có kiểm tra Player đang ở phía trên'], ['bounce', /vspeed\s*=\s*-\s*\d+/i, 'Mario nảy lên khi giậm địch'], ['destroyOther', /instance_destroy\s*\(\s*other\s*\)/i, 'Hủy kẻ địch bằng instance_destroy(other)'], ['destroySelf', /instance_destroy\s*\(\s*\)/i, 'Hủy Player khi va chạm ngang']], },
+    { title:'Hiệu ứng chết nảy rồi rơi', tag:'25 phút', desc:'Tạo object chết riêng để Mario và kẻ địch không biến mất ngay lập tức.', rules:[['spawnDie', /instance_create_layer\s*\([^;]*(?:obj_player_die|obj_enemy_die)/i, 'Tạo instance hiệu ứng chết'], ['bounce', /vspeed\s*=\s*-\s*\d+/i, 'Đặt vận tốc nảy lên'], ['gravity', /gravity\s*=\s*\d+(?:\.\d+)?/i, 'Thêm trọng lực cho object chết']], },
+    { title:'Ăn đồng xu và tăng điểm', tag:'25 phút', desc:'Khai báo biến diem, cho xu trôi và cộng điểm khi Player chạm xu.', rules:[['scoreVar', /\bdiem\s*=\s*0/i, 'Khai báo diem = 0'], ['moveCoin', /\bhspeed\s*=\s*-\s*\d+/i, 'Cho đồng xu di chuyển sang trái'], ['addScore', /diem\s*=\s*diem\s*\+\s*1|diem\s*\+=\s*1/i, 'Cộng điểm khi ăn xu'], ['removeCoin', /instance_destroy\s*\(\s*other\s*\)/i, 'Hủy đồng xu sau khi ăn']], },
+    { title:'Hiển thị điểm bằng Draw GUI', tag:'20 phút', desc:'Vẽ HUD cố định trên màn hình dù camera di chuyển.', rules:[['drawGui', /draw_text\s*\(/i, 'Có lệnh draw_text'], ['string', /string\s*\(\s*diem\s*\)/i, 'Đổi diem thành chuỗi bằng string(diem)'], ['scoreText', /(?:diem|Diem\s*so)/i, 'Hiển thị biến điểm số']], }
   ];
   let active = 0, completed = new Set(JSON.parse(localStorage.getItem('gml-companion-completed') || '[]')), scanned = '', lastHits = null;
   const eventCode = {create:'// Create Event\ngravity = 0.8;\n', collision:'// Collision Event with obj_ground\nif (vspeed > 0) {\n  vspeed = 0;\n  gravity = 0;\n}\n', jump:'// Key Press <Up>\nif (place_meeting(x, y + 1, obj_ground)) {\n  vspeed = -14;\n}\n'}; try { const savedEvents = localStorage.getItem('gml-mini-events'); if(savedEvents) Object.assign(eventCode, JSON.parse(savedEvents)); } catch(e) {} let selectedEvent = 'create';
